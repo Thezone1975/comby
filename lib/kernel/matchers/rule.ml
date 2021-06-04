@@ -132,7 +132,12 @@ module Parser = struct
   let optional_trailing c = option () (skip (Char.equal c))
 
   let option_parser =
-    lift (fun _ -> Option "nested") (spaces *> (string Syntax.option_nested) <* spaces)
+    lift
+      (fun s -> Option s)
+      (choice
+         [ (spaces *> (string Syntax.option_nested) <* spaces)
+         ; (spaces *> (string Syntax.option_loose_whitespace) <* spaces)
+         ])
 
   let true' = lift (fun _ -> True) (spaces *> string Syntax.true' <* spaces)
 
@@ -218,9 +223,11 @@ type t = Types.Rule.t
 
 type options =
   { nested : bool
+  ; loose_whitespace : bool
   }
 
 let options rule =
-  List.fold rule ~init:{ nested = false } ~f:(fun acc -> function
-      | Types.Ast.Option name when String.(name = Syntax.option_nested) -> { nested = true }
+  List.fold rule ~init:{ nested = false; loose_whitespace = false } ~f:(fun acc -> function
+      | Types.Ast.Option name when String.(name = Syntax.option_nested) -> { acc with nested = true }
+      | Types.Ast.Option name when String.(name = Syntax.option_loose_whitespace) -> { acc with loose_whitespace = true }
       | _ -> acc)

@@ -1013,7 +1013,7 @@ module Make (Language : Types.Language.S) (Meta : Metasyntax.S) = struct
       filepath_ref := filepath;
       push_matches_ref := !matches_ref;
       configuration_ref := Option.value configuration ~default:!configuration_ref;
-      let Rule.{ nested } = Rule.options rule in
+      let Rule.{ nested; loose_whitespace } = Rule.options rule in
       let template, rule = Preprocess.map_aliases template (Some rule) Meta.aliases in
       let rec aux_all ?configuration ?(nested = false) ~template ~source () =
         matches_ref := [];

@@ -7,8 +7,10 @@ let variable_left_delimiter = ":["
 let variable_right_delimiter = "]"
 let true' = "true"
 let false' = "false"
-let option_nested = "nested"
 let pipe_operator = "|"
 let arrow = "->"
+
+let option_nested = "nested"
+let option_loose_whitespace = "loose-whitespace"
 
 let separator = "---"

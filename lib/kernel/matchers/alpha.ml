@@ -960,7 +960,7 @@ module Make (Lang : Types.Language.S) (Meta : Metasyntax.S) = struct
 
     let all ?configuration ?filepath ?(rule = [Types.Ast.True]) ~template ~source:original_source () : Match.t list =
       let _ : string option = filepath in
-      let Rule.{ nested } = Rule.options rule in
+      let Rule.{ nested; loose_whitespace } = Rule.options rule in
       let template, rule = Preprocess.map_aliases template (Some rule) Meta.aliases in
       let rule = Option.value_exn rule in (* OK in this case *)
       let rec aux_all ?configuration ?(nested = false) ~template ~source:original_source () =

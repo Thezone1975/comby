@@ -458,6 +458,7 @@ module Matchers : sig
 
     type options =
       { nested : bool
+      ; loose_whitespace : bool
       }
 
     val create : string -> t Core_kernel.Or_error.t
