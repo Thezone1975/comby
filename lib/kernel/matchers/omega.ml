@@ -32,6 +32,8 @@ let push_source_ref : string ref = ref ""
 
 let filepath_ref : string option ref = ref None
 
+let loose_whitespace_ref : bool ref = ref false
+
 let debug =
   match Sys.getenv "DEBUG_COMBY" with
   | exception Not_found -> false
@@ -1014,6 +1016,7 @@ module Make (Language : Types.Language.S) (Meta : Metasyntax.S) = struct
       push_matches_ref := !matches_ref;
       configuration_ref := Option.value configuration ~default:!configuration_ref;
       let Rule.{ nested; loose_whitespace } = Rule.options rule in
+      loose_whitespace_ref := loose_whitespace;
       let template, rule = Preprocess.map_aliases template (Some rule) Meta.aliases in
       let rec aux_all ?configuration ?(nested = false) ~template ~source () =
         matches_ref := [];
