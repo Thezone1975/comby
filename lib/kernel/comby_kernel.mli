@@ -350,7 +350,6 @@ module Matchers : sig
       | LineEnd
       | ColumnStart
       | ColumnEnd
-      | LsifHover
       | FileName
       | FilePath
       | FileDirectory
@@ -362,6 +361,7 @@ module Matchers : sig
       | LowerCamelCase
       | UpperSnakeCase
       | LowerSnakeCase
+      | External of string
 
     type syntax =
       { variable : string

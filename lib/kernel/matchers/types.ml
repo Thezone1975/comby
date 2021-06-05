@@ -122,6 +122,8 @@ type production =
   | Hole of hole
 
 module Template = struct
+  type external_property = name:string -> filepath:string -> line:int -> column:int -> string option
+
   type kind =
     | Value
     | Length
@@ -132,7 +134,6 @@ module Template = struct
     | LineEnd
     | ColumnStart
     | ColumnEnd
-    | LsifHover
     | FileName
     | FilePath
     | FileDirectory
@@ -144,6 +145,7 @@ module Template = struct
     | LowerCamelCase
     | UpperSnakeCase
     | LowerSnakeCase
+    | External of string
   [@@deriving sexp]
 
   type syntax =
