@@ -1,6 +1,6 @@
 open Types.Template
 
-module Make : Metasyntax.S -> sig
+module Make : Metasyntax.S -> External.S -> sig
 
     module Matching : sig
       val hole_parsers : (Types.Hole.sort * string Vangstrom.t) list

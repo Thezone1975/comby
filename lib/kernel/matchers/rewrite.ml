@@ -80,7 +80,7 @@ let substitute_in_rewrite_template
     template
     environment =
   let (module M) = Metasyntax.create metasyntax in
-  let module Template_parser = Template.Make(M) in
+  let module Template_parser = Template.Make(M)(External.Default) in
   let template = substitute_fresh ~metasyntax ?fresh template in
   let terms = Template_parser.parse template in
   let replacement_content, environment = Template_parser.substitute ?filepath terms environment in

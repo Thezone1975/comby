@@ -3,7 +3,7 @@ open Vangstrom
 
 open Types.Ast
 
-module Template = Template.Make(Metasyntax.Default)
+module Template = Template.Make(Metasyntax.Default)(External.Default)
 
 module Parser = struct
 

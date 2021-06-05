@@ -335,6 +335,17 @@ module Matchers : sig
 
   type metasyntax = Metasyntax.t
 
+  module External : sig
+    type t = name:string -> filepath:string -> line:int -> column:int -> string option
+
+    module type S = sig
+      val handler : t
+    end
+
+    (** A module representing the default external handler *)
+    module Default : S
+  end
+
   (** {3 Template}
 
       Parse a template based on metasynax *)
@@ -379,7 +390,7 @@ module Matchers : sig
     type t = atom list
     [@@deriving sexp]
 
-    module Make : Metasyntax.S -> sig
+    module Make : Metasyntax.S -> External.S -> sig
         val parse : string -> t
         val variables : string -> syntax list
       end

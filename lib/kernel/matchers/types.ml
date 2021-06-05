@@ -116,14 +116,20 @@ module Metasyntax = struct
   end
 end
 
+module External = struct
+  type t = name:string -> filepath:string -> line:int -> column:int -> string option
+
+  module type S = sig
+    val handler : t
+  end
+end
+
 type production =
   | Unit
   | String of string
   | Hole of hole
 
 module Template = struct
-  type external_property = name:string -> filepath:string -> line:int -> column:int -> string option
-
   type kind =
     | Value
     | Length

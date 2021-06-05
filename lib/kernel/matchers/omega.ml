@@ -50,7 +50,7 @@ module Make (Language : Types.Language.S) (Meta : Metasyntax.S) = struct
   module rec Matcher : Types.Matcher.S = struct
     include Language.Info
 
-    module Template = Template.Make(Meta)
+    module Template = Template.Make(Meta)(External.Default)
 
     let wildcard = "_"
 

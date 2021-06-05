@@ -29,7 +29,7 @@ let merge_match_environments matches environment' =
       Environment.merge environment environment')
 
 (* FIXME. Propagate this. *)
-module Template = Template.Make(Metasyntax.Default)
+module Template = Template.Make(Metasyntax.Default)(External.Default)
 
 let substitute ?filepath env v =
   match v with

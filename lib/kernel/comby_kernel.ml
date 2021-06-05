@@ -19,6 +19,8 @@ module Matchers = struct
   module Metasyntax = Matchers.Metasyntax
   type metasyntax = Matchers.Metasyntax.t
 
+  module External = Matchers.External
+
   module Alpha = Matchers.Alpha
   module Omega = Matchers.Omega
 

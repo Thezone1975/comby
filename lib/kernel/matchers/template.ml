@@ -9,7 +9,7 @@ let debug =
   | exception Not_found -> false
   | _ -> true
 
-module Make (Metasyntax : Types.Metasyntax.S) = struct
+module Make (Metasyntax : Types.Metasyntax.S) (External : Types.External.S) = struct
 
   let up_to p =
     many1 (not_followed_by p *> any_char)
