@@ -195,6 +195,10 @@ end
 module Rule = struct
   type t = Ast.expression list
   [@@deriving sexp]
+
+  module type S = sig
+    val create : string -> (Ast.expression list, Error.t) result
+  end
 end
 
 module Matcher = struct

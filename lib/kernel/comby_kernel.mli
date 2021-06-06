@@ -471,7 +471,7 @@ module Matchers : sig
       { nested : bool
       }
 
-    val create : string -> t Core_kernel.Or_error.t
+    val create : ?metasyntax:metasyntax -> string -> t Core_kernel.Or_error.t
 
     val options : t -> options
 

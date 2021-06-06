@@ -5,7 +5,8 @@ let debug =
   | exception Not_found -> false
   | _ -> true
 
-let map_aliases template parent_rule aliases =
+let map_aliases (module Metasyntax : Metasyntax.S) template parent_rule aliases =
+  let module Parser = Rule.Make (Metasyntax) in
   List.fold aliases
     ~init:(template, parent_rule)
     ~f:(fun (template, parent_rule) Types.Metasyntax.{ pattern; match_template; rule } ->
@@ -18,7 +19,7 @@ let map_aliases template parent_rule aliases =
           let rule' =
             let rule =
               rule
-              >>| Rule.Parser.create
+              >>| Parser.create
               >>| function
               | Ok rule -> rule
               | Error e -> failwith @@ "Could not parse rule for alias entry:"^(Error.to_string_hum e)

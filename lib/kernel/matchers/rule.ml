@@ -3,9 +3,9 @@ open Vangstrom
 
 open Types.Ast
 
-module Template = Template.Make(Metasyntax.Default)(External.Default)
 
-module Parser = struct
+module Make (Metasyntax : Types.Metasyntax.S) = struct
+  module Template = Template.Make(Metasyntax)(External.Default)
 
   let is_whitespace = function
     | ' ' | '\t' | '\r' | '\n' -> true
@@ -215,6 +215,11 @@ end
 
 type t = Types.Rule.t
 [@@deriving sexp]
+
+let create ?(metasyntax = Metasyntax.default_metasyntax) rule =
+  let (module Metasyntax) = Metasyntax.create metasyntax in
+  let (module Rule : Types.Rule.S) = (module (Make (Metasyntax))) in
+  Rule.create rule
 
 type options =
   { nested : bool

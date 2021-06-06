@@ -104,7 +104,6 @@ let%expect_test "parse_reserved_identifiers_as_holes" =
  (Hole ((variable "\206\177") (pattern "\206\177") (offset 1) (kind Value)))
  (Constant ")"))|}]
 
-
 let%expect_test "get_offsets_for_holes" =
   let module Template_parser = Template.Make(Metasyntax.Default)(External.Default) in
   let template = ":[a].type :[b].length :[[c]].lengtha :[d.].length.ok (:[e].length)" in

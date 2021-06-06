@@ -32,7 +32,6 @@ module Matchers = struct
 
   module Rule = struct
     include Matchers.Rule
-    include Matchers.Rule.Parser
     include Matchers.Evaluate
   end
   type rule = Rule.t
