@@ -28,21 +28,21 @@ let merge_match_environments matches environment' =
   List.map matches ~f:(fun { environment; _ } ->
       Environment.merge environment environment')
 
-(* FIXME. Propagate this. *)
-module Template = Template.Make(Metasyntax.Default)(External.Default)
-
-let substitute ?filepath env v =
-  match v with
-  | Template t -> Rewrite.substitute ?filepath (Template.to_string t) env
-  | String s -> s
-
 let apply
     ?(substitute_in_place = true)
-    ?metasyntax
+    ?(metasyntax = Metasyntax.default_metasyntax)
     ?filepath
     ~(match_all:(?configuration:Configuration.t -> ?filepath:string -> template:string -> source:string -> unit -> Match.t list))
     predicates
     env =
+  let (module Metasyntax) = Metasyntax.create metasyntax in
+  let (module Template : Types.Template.S) = (module (Template.Make (Metasyntax) (External.Default))) in
+
+  let substitute ?filepath env v =
+    match v with
+    | Template t -> Rewrite.substitute ?filepath (Template.to_string t) env
+    | String s -> s
+  in
 
   (* accepts only one expression *)
   let rec eval env =
@@ -108,13 +108,13 @@ let apply
       let configuration = Configuration.create ~match_kind:Fuzzy () in
       let matches = match_all ~configuration ~template ~source () in
       let source = if substitute_in_place then Some source else None in
-      let result = Rewrite.all ?metasyntax ?source ~rewrite_template matches in
+      let result = Rewrite.all ~metasyntax ?source ~rewrite_template matches in
       if Option.is_empty result then
         true, Some env (* rewrites are always sat. *)
       else
         let Replacement.{ rewritten_source; _ } = Option.value_exn result in
         (* substitute for variables that are in the outside scope *)
-        let rewritten_source = Rewrite.substitute ?filepath ?metasyntax rewritten_source env in
+        let rewritten_source = Rewrite.substitute ?filepath ~metasyntax rewritten_source env in
         let variable =
           match t with
           | [ Types.Template.Hole { variable; _ } ] -> variable
