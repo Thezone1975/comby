@@ -877,20 +877,33 @@ module Make (Language : Types.Language.S) (Meta : Metasyntax.S) (Ext : External.
         |> List.map ~f:(fun (sort, _) -> hole_parser sort Code)
         |> choice
       in
+      (*let optional = option () (ignore @@ string s)*)
+      let optional_spaces =
+        option "" Omega_parser_helper.spaces1 in
       fix (fun (generator : (production * 'a) t list t) ->
           if debug then Format.printf "Descends@.";
           let nested =
             if debug then Format.printf "Nested@.";
             choice @@
             List.map Language.Syntax.user_defined_delimiters ~f:(fun (left_delimiter, right_delimiter) ->
-                (string left_delimiter *> generator <* string right_delimiter)
+                (optional_spaces
+                 *>
+                 string left_delimiter
+                 *> optional_spaces
+                 *> generator
+                 <* optional_spaces
+                 <* string right_delimiter)
                 >>= fun (g: (production * 'a) t list) ->
                 if debug then Format.printf "G size: %d; delim %s@." (List.length g) left_delimiter;
                 return @@
                 sequence_chain' @@
-                [string left_delimiter >>= fun result -> r acc (Template_string result)]
+                [ optional_spaces >>= fun result -> r acc (String result) ]
+                @ [ string left_delimiter >>= fun result -> r acc (Template_string result)]
+                @ [ optional_spaces >>= fun result -> r acc (String result) ]
                 @ g
-                @ [ string right_delimiter >>= fun result -> r acc (Template_string result)])
+                @ [ optional_spaces >>= fun result -> r acc (String result) ]
+                @ [ string right_delimiter >>= fun result -> r acc (Template_string result)]
+                @ [ optional_spaces >>= fun result -> r acc (String result) ])
           in
           many @@ choice
             [ code_holes

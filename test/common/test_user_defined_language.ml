@@ -64,17 +64,7 @@ let%expect_test "user_defined_language" =
     |}];
 
   run (module Omega) user_lang source match_template rewrite_template ;
-  [%expect_exact {|
-      case nuked blocks esac
-      /*
-      case
-        ignore this
-      esac
-      */
-      // case
-      //   ignore this
-      // esac
-    |}]
+  [%expect_exact {|case nuked blocks esac|}]
 
 
 let%expect_test "user_defined_language_from_json" =
